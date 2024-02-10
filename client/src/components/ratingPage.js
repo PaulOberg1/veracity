@@ -4,7 +4,7 @@
     Dependencies: react, axios
 */
 
-import react, {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 
 
@@ -12,6 +12,9 @@ import axios from "axios";
 const ratingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
+
+    
+
 
     /*
         Makes POST request to backend to send comment data
@@ -26,7 +29,7 @@ const ratingPage = () => {
             setRating(result.data);
         })
         .catch((error) => {
-            console.error("error : " + error.message)
+            console.error("error : " + error.message);
         })
     }
 
@@ -39,3 +42,5 @@ const ratingPage = () => {
         </div>
     )
 }
+
+export default ratingPage;

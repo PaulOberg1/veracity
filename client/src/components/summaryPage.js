@@ -4,7 +4,7 @@
     Dependencies: react, axios 
 */
 
-import react, {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 
 
@@ -42,3 +42,5 @@ const summaryPage = () => {
         </div>
     )
 }
+
+export default summaryPage;
