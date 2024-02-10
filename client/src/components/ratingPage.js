@@ -4,8 +4,8 @@ import axios from "axios";
 const ratingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
-    
-    const sendComments = () => {
+
+    const getRating = () => {
         axios.post("/rate",comments)
         .then(response => response.json)
         .then(result => {
@@ -19,7 +19,7 @@ const ratingPage = () => {
 
     return (
         <div>
-            <button onClick={() => {sendComments}}>Veracity Rating</button>
+            <button onClick={() => {getRating}}>Veracity Rating</button>
             {rating &&
             <p>Rating = {rating}</p>
             }
