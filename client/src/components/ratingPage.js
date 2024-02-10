@@ -1,6 +1,18 @@
+/*
+    File: ratingPage.js
+    Description: This file implements the veracity rating feature of the program.
+    Dependencies: react, axios
+*/
+
 import react, {useState} from "react";
 import axios from "axios";
 
+
+/*
+    Makes POST request to backend to send comment data
+    Receive sentiment analysis scores of comments
+    Handles error checking
+*/
 const ratingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
