@@ -13,11 +13,11 @@ const summaryPage = () => {
     const [transcript,setTranscript] = useState("");
     const [summaryHTML,setSummaryHTML] = useState(null);
 
-    /*
-        Makes POST request to backend sending transcript data
-        Receives summary HTML data from backend and stores data
-        Handles error checking
-    */
+    /**
+     * Makes POST request to backend sending transcript data
+     * Receives summary HTML data from backend and stores data
+     * Handles error checking
+     */
     const sendTranscript = () => {
         axios.post("/summarise",transcript)
         .then(response => response.json)

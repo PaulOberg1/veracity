@@ -9,18 +9,36 @@ import axios from "axios";
 
 
 
+
 const ratingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
 
     
+    /**
+     * Makes POST request to backend to send current video id
+     * Receives comment section of given video
+     *  Updates 'comments' state
+     */
+    const getComments = () => {
+        const url = window.location.href;
+        axios.post("/getComments",url)
+        .then(response => response.json)
+        .then(result => {
+            console.log(`success : ${result.message}`);
+            setComments(result.data);
+        })
+        .catch((error) => {
+            console.error(`error: ${error}`);
+        })
+    }
 
 
-    /*
-        Makes POST request to backend to send comment data
-        Receive sentiment analysis scores of comments
-        Handles error checking
-    */
+    /**
+     * Makes POST request to backend to send comment data
+     * Receive sentiment analysis scores of comments
+     * Handles error checking
+     */        
     const getRating = () => {
         axios.post("/rate",comments)
         .then(response => response.json)
