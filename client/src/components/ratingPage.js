@@ -4,7 +4,7 @@
     Dependencies: react, axios
 */
 
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import axios from "axios";
 
 
@@ -17,23 +17,25 @@ const RatingPage = (videoID) => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
 
-    
-     /**
-     * Makes POST request to backend to send current video id
-     * Receives comment section of given video
-     *  Updates 'comments' state
-     */
-     const getComments = () => {
-        axios.post("/getComments",videoID) //Post video ID to backend
-        .then(response => response.json) //Convert response to json
-        .then(result => {
-            console.log(`success : ${result.message}`);
-            setComments(result.data); //Update 'comments' state
-        })
-        .catch((error) => {
-            console.error(`error: ${error}`);
-        })
-    }
+    useEffect(() => { //Call once video ID available
+        /**
+         * Makes POST request to backend to send current video id
+         * Receives comment section of given video
+         *  Updates 'comments' state
+         */
+        const getComments = () => {
+            axios.post("/getComments",videoID) //Post video ID to backend
+            .then(response => response.json) //Convert response to json
+            .then(result => {
+                console.log(`success : ${result.message}`);
+                setComments(result.data); //Update 'comments' state
+            })
+            .catch((error) => {
+                console.error(`error: ${error}`);
+            })
+        };
+        getComments();
+    },[videoID]);
 
 
     /**
@@ -55,7 +57,7 @@ const RatingPage = (videoID) => {
 
     return (
         <div>
-            <button onClick={() => {getRating}}>Veracity Rating</button>
+            <button onClick={getRating()}>Veracity Rating</button>
 
             {/* Rating Display if available */}
             {rating &&
