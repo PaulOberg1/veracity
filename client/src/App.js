@@ -6,8 +6,14 @@ function App() {
     <Router>
       <div>
         <Routes>
-          <Route path="/rate" element={{ratingPage}}/>
-          <Route path="/summarise" element={{summaryPage}}/>
+          <Route path="/rate" element={{RatingPage}}/>
+          <Route path="/summarise" element={{SummaryPage}}/>
+          <Route path="/home" element={{HomePage}}/>
+          <Route path="/" element={
+            <>
+              <Navigate to="/home"/>
+            </>
+          }/>
         </Routes>
       </div>
     </Router>
