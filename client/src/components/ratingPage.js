@@ -15,7 +15,7 @@ import axios from "axios";
  */
 const RatingPage = (videoID) => {
     const [comments,setComments] = useState("");
-    const [rating, setRating] = useState(null);
+    const [rating, setRating] = useState("");
 
     useEffect(() => { //Call once video ID available
         /**
@@ -24,9 +24,9 @@ const RatingPage = (videoID) => {
          *  Updates 'comments' state
          */
         const getComments = () => {
-            axios.post("/getComments",videoID) //Post video ID to backend
-            .then(response => response.json) //Convert response to json
-            .then(result => {
+            axios.post("/getComments",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
+            .then(response => response.data)
+            .then(result => { //Receive comments array from backend
                 console.log(`success : ${result.message}`);
                 setComments(result.data); //Update 'comments' state
             })
@@ -44,14 +44,14 @@ const RatingPage = (videoID) => {
      * Handles error checking
      */        
     const getRating = () => {
-        axios.post("/rate",comments) //Post comments to backend
-        .then(response => response.json) //Recieve backend response, convert to JSON
+        axios.post("/rate",comments, {headers: {"Content-Type":"application/json"}}) //Post comments to backend
+        .then(response => response.data)
         .then(result => {
-            console.log("response: " + result.message); //Log success
+            console.log("response: " + result.data); //Log success
             setRating(result.data); //Acccess rating from backend response, update 'rating' state
         })
         .catch((error) => {
-            console.error("error : " + error.message);
+            console.error("error : " + error);
         })
     }
 
