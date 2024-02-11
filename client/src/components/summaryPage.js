@@ -12,10 +12,27 @@ import axios from "axios";
  * Display summary page with summarise button and summarised transcript
  * @returns {HTML} The summary page as HTML
  */
-const SummaryPage = () => {
+const SummaryPage = (videoID) => {
     const [transcript,setTranscript] = useState("");
     const [summaryHTML,setSummaryHTML] = useState(null);
 
+
+    /**
+     * Fetch transcript from backend given video ID
+     */
+    const getTranscript = () => {
+        axios.post("/getTranscript",videoID) //Post video ID to backend
+        .then(response => response.json) //Receive transcript from backend
+        .then(result => {
+            console.log(result.message);
+            setTranscript(result.data); //Update transcript state
+        })
+        .catch((error) => {
+            console.log(error.message);
+        })
+    }
+
+    
     /**
      * Makes POST request to backend sending transcript data
      * Receives summary HTML data from backend and stores data
