@@ -86,11 +86,15 @@ def rate():
         text = "".join(comments) #Concatenate all the comments into a single block of text
         scores = analyzer.polarity_scores(text) #Compute the sentiment analysis scores of the text
         codeToWord = {"neg":"Negative","neu":"Neutral","pos":"Positive","compound":"Compound"} #Maps keys in 'scores' variable to readable form
-        result = codeToWord[max(scores.items(),lambda pair: pair[1])[0]] #Obtains final rating as adjective
+        result = codeToWord[max(scores.items(),key=lambda pair: pair[1])[0]] #Obtains final rating as adjective
 
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
         return jsonify({"message":f"error: {e}"}),500
+
+@app.route('/') #Root of application
+def index():
+    return "Hello, this is the root of the Flask application!"
 
 if __name__=="__main__":
     app.run(debug=True)
