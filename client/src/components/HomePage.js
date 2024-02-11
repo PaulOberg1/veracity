@@ -13,13 +13,11 @@ import RatingPage from "./RatingPage";
  * @param {string} url The video URL
  * @returns {string | null} The video ID
  */
-const getVideoID = () => {
-    const url = window.location.href;
-    const string = "/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/"; //String to compare against
+const getVideoID = (url) => {
+    const string = /^(?:.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=))([^#\&\?]*).*/;
     const id = url.match(string); //Matches string with given url
-    
-    if (id && id[2].length === 11) { //If output valid, ID of expected length
-        return id[2];
+    if (id && id[1].length === 11) { //If output valid, ID of expected length
+        return id[1];
     } else {
         return null;
     }
@@ -32,9 +30,15 @@ const getVideoID = () => {
  */
 const HomePage = () => {
     const [activeTab, setActiveTab] = useState("ratingTab"); //Either rating tab or summary tab
+    const [URL, setURL] = useState("https://www.youtube.com/watch?v=MJiBpHVdzAg");
 
     return (
         <div>
+
+            <form>
+                <label>URL</label>
+                <input type="text" value={URL} onChange={(e) => {setURL(e.target.value)}}/>
+            </form>
 
             {/* Tab Section*/}
             <div id="tabs">
@@ -53,8 +57,8 @@ const HomePage = () => {
             </div>
 
             {/* Display contents of either tab */}
-            {activeTab==="ratingTab" && <RatingPage videoID={getVideoID()}/>}
-            {activeTab==="summaryTab" && <SummaryPage videoID={getVideoID()}/>}
+            {activeTab==="ratingTab" && <RatingPage videoID={getVideoID(URL)}/>}
+            {activeTab==="summaryTab" && <SummaryPage videoID={getVideoID(URL)}/>}
         </div>
     )
 }
