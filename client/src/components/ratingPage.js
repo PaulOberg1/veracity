@@ -1,5 +1,5 @@
 /*
-    File: ratingPage.js
+    File: RatingPage.js
     Description: This file implements the veracity rating feature of the program.
     Dependencies: react, axios
 */
@@ -25,6 +25,10 @@ const getVideoID = (url) => {
 }
 
 
+/**
+ * Display rating page with rate button and rating
+ * @returns {HTML} The rating page as HMTL
+ */
 const RatingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
@@ -37,11 +41,11 @@ const RatingPage = () => {
      */
     const getComments = () => {
         const videoID = getVideoID(window.location.href);
-        axios.post("/getComments",videoID)
-        .then(response => response.json)
+        axios.post("/getComments",videoID) //Post video ID to backend
+        .then(response => response.json) //Convert response to json
         .then(result => {
             console.log(`success : ${result.message}`);
-            setComments(result.data);
+            setComments(result.data); //Update 'comments' state
         })
         .catch((error) => {
             console.error(`error: ${error}`);
@@ -55,11 +59,11 @@ const RatingPage = () => {
      * Handles error checking
      */        
     const getRating = () => {
-        axios.post("/rate",comments)
-        .then(response => response.json)
+        axios.post("/rate",comments) //Post comments to backend
+        .then(response => response.json) //Recieve backend response, convert to JSON
         .then(result => {
-            console.log("response: " + result.message);
-            setRating(result.data);
+            console.log("response: " + result.message); //Log success
+            setRating(result.data); //Acccess rating from backend response, update 'rating' state
         })
         .catch((error) => {
             console.error("error : " + error.message);
@@ -69,6 +73,8 @@ const RatingPage = () => {
     return (
         <div>
             <button onClick={() => {getRating}}>Veracity Rating</button>
+
+            {/* Rating Display if available */}
             {rating &&
             <p>Rating = {rating}</p>
             }

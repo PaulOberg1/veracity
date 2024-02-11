@@ -1,5 +1,5 @@
 /*
-    File: summaryPage.js
+    File: SummaryPage.js
     Description: Implement transcript summary feature.
     Dependencies: react, axios 
 */
@@ -8,7 +8,10 @@ import React, {useState} from "react";
 import axios from "axios";
 
 
-
+/**
+ * Display summary page with summarise button and summarised transcript
+ * @returns {HTML} The summary page as HTML
+ */
 const SummaryPage = () => {
     const [transcript,setTranscript] = useState("");
     const [summaryHTML,setSummaryHTML] = useState(null);
@@ -19,8 +22,8 @@ const SummaryPage = () => {
      * Handles error checking
      */
     const sendTranscript = () => {
-        axios.post("/summarise",transcript)
-        .then(response => response.json)
+        axios.post("/summarise",transcript) //Send transcript to backend
+        .then(response => response.json) //Receive summary data from backend, convert to JSON
         .then(result => {
             console.log("response : " + result.message);
             setSummaryHTML(result.text); //Store summary data as html on frontend
@@ -32,9 +35,11 @@ const SummaryPage = () => {
 
     return (
         <div>
+            {/* Summary Button if transcript available */}
             {transcript && (
                 <button onClick={sendTranscript}>Summarise Video</button>
             )}
+            {/* Summary Display if available */}
             {summaryHTML && (
                 <div dangerouslySetInnerHTML={{__html: summaryHTML}} /> 
             )}
