@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from googleapiclient.discovery import build
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 youtube = build("youtube","v3",developerKey="AIzaSyAO7SrY7EwY2JHv28qksxr2xmOSwbA96PU")
 
 @app.route("/getComments", methods=["POST"])
@@ -89,3 +92,6 @@ def rate():
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
         return jsonify({"message":f"error: {e}"}),500
+
+if __name__=="__main__":
+    app.run(debug=True)
