@@ -18,12 +18,12 @@ const RatingPage = (videoID) => {
     const [rating, setRating] = useState(null);
 
     
-    /**
+     /**
      * Makes POST request to backend to send current video id
      * Receives comment section of given video
      *  Updates 'comments' state
      */
-    const getComments = () => {
+     const getComments = () => {
         axios.post("/getComments",videoID) //Post video ID to backend
         .then(response => response.json) //Convert response to json
         .then(result => {

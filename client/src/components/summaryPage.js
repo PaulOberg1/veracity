@@ -4,7 +4,7 @@
     Dependencies: react, axios 
 */
 
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import axios from "axios";
 
 
@@ -17,22 +17,23 @@ const SummaryPage = (videoID) => {
     const [summaryHTML,setSummaryHTML] = useState(null);
 
 
-    /**
-     * Fetch transcript from backend given video ID
-     */
-    const getTranscript = () => {
-        axios.post("/getTranscript",videoID) //Post video ID to backend
-        .then(response => response.json) //Receive transcript from backend
-        .then(result => {
-            console.log(result.message);
-            setTranscript(result.data); //Update transcript state
-        })
-        .catch((error) => {
-            console.log(error.message);
-        })
-    }
+    useEffect(() => { //Call this once at start of program
+        /**
+         * Fetch transcript from backend given video ID
+         */
+        const getTranscript = () => {
+            axios.post("/getTranscript",videoID) //Post video ID to backend
+            .then(response => response.json) //Receive transcript from backend
+            .then(result => {
+                console.log(result.message);
+                setTranscript(result.data); //Update transcript state
+            })
+            .catch((error) => {
+                console.log(error.message);
+            })
+        }
+    },[])
 
-    
     /**
      * Makes POST request to backend sending transcript data
      * Receives summary HTML data from backend and stores data
