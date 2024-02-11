@@ -9,7 +9,7 @@ import axios from "axios";
 
 
 
-const summaryPage = () => {
+const SummaryPage = () => {
     const [transcript,setTranscript] = useState("");
     const [summaryHTML,setSummaryHTML] = useState(null);
 
@@ -43,4 +43,4 @@ const summaryPage = () => {
     )
 }
 
-export default summaryPage;
+export default SummaryPage;

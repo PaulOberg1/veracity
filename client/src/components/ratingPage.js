@@ -25,7 +25,7 @@ const getVideoID = (url) => {
 }
 
 
-const ratingPage = () => {
+const RatingPage = () => {
     const [comments,setComments] = useState("");
     const [rating, setRating] = useState(null);
 
@@ -76,4 +76,4 @@ const ratingPage = () => {
     )
 }
 
-export default ratingPage;
+export default RatingPage;
