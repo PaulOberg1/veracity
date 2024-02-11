@@ -36,6 +36,36 @@ def getComments():
     except Exception as e:
         return jsonify({"message":f"error: {e}"}),500
 
+@app.route("/getTranscript",methods=["POST"])
+def getTranscript():
+    """
+    Fetch transcript of a YouTube video given a video ID
+
+    Input:
+    - JSON: A JSON object containing the video ID
+
+    ReturnsL
+    - JSON: A JSON object containing the transcript if function successful
+    """
+    try:
+        videoID = request.json #Fetch video ID from request data
+        response = youtube.captions().list( #
+            part="snippet",
+            videoId = videoID
+        )
+        transcripts=[]
+        for item in response["items"]:
+            caption_id=item["id"] #Get ID of given caption track
+            transcript_response=youtube.captions.download( #Get caption track matching video ID
+                id=caption_id,
+                tfmt="ttml" #Convert caption track to Timed Text Markup Language format
+            ).execute()
+            transcript=transcript_response.decode("utf-8")
+            transcripts.append(transcript)
+        
+        return jsonify({"message":"transcript successfully retrieved from YouTube API", "data":transcripts}),200
+    except Exception as e:
+        return jsonify({"message":f"error: {e}"}),500
 
 @app.route("/rate",methods=["POST"])
 def rate():
