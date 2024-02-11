@@ -22,9 +22,9 @@ const SummaryPage = (videoID) => {
          * Fetch transcript from backend given video ID
          */
         const getTranscript = () => {
-            axios.post("/getTranscript",videoID) //Post video ID to backend
-            .then(response => response.json) //Receive transcript from backend
-            .then(result => {
+            axios.post("/getTranscript",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
+            .then(response => response.json)
+            .then(result => { //Receive transcript from backend
                 console.log(result.message);
                 setTranscript(result.data); //Update transcript state
             })
@@ -41,9 +41,9 @@ const SummaryPage = (videoID) => {
      * Handles error checking
      */
     const sendTranscript = () => {
-        axios.post("/summarise",transcript) //Send transcript to backend
-        .then(response => response.json) //Receive summary data from backend, convert to JSON
-        .then(result => {
+        axios.post("/summarise",transcript, {headers: {"Content-Type":"application/json"}}) //Send transcript to backend
+        .then(response => response.json)
+        .then(result => { //Receive summary data from backend
             console.log("response : " + result.message);
             setSummaryHTML(result.text); //Store summary data as html on frontend
         })
