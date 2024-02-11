@@ -17,7 +17,7 @@ const SummaryPage = (videoID) => {
     const [summaryHTML,setSummaryHTML] = useState(null);
 
 
-    useEffect(() => { //Call this once at start of program
+    useEffect(() => { //Call once video ID available
         /**
          * Fetch transcript from backend given video ID
          */
@@ -31,8 +31,9 @@ const SummaryPage = (videoID) => {
             .catch((error) => {
                 console.log(error.message);
             })
-        }
-    },[])
+        };
+        getTranscript();
+    },[videoID]);
 
     /**
      * Makes POST request to backend sending transcript data
@@ -47,7 +48,7 @@ const SummaryPage = (videoID) => {
             setSummaryHTML(result.text); //Store summary data as html on frontend
         })
         .catch((error) => {
-            console.error("error: " + e);
+            console.error("error: " + error);
         })
     }
 
@@ -55,7 +56,7 @@ const SummaryPage = (videoID) => {
         <div>
             {/* Summary Button if transcript available */}
             {transcript && (
-                <button onClick={sendTranscript}>Summarise Video</button>
+                <button onClick={sendTranscript()}>Summarise Video</button>
             )}
             {/* Summary Display if available */}
             {summaryHTML && (

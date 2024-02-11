@@ -18,8 +18,8 @@ const getVideoID = () => {
     const string = "/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/"; //String to compare against
     const id = url.match(string); //Matches string with given url
     
-    if (match && match[2].length === 11) { //If output valid, ID of expected length
-        return match[2];
+    if (id && id[2].length === 11) { //If output valid, ID of expected length
+        return id[2];
     } else {
         return null;
     }
@@ -40,13 +40,13 @@ const HomePage = () => {
             <div id="tabs">
 
                 {/* Button to switch to rating tab */}
-                <button className={activeTab=="ratingTab" ? "active" : "inactive"}
+                <button className={activeTab==="ratingTab" ? "active" : "inactive"}
                 onClick={() => {setActiveTab("ratingTab")}}>
                     Rating
                 </button>
 
                 {/* Button to switch to summary tab */}
-                <button className={activeTab=="summaryTab" ? "active" : "inactive"}
+                <button className={activeTab==="summaryTab" ? "active" : "inactive"}
                 onClick={() => {setActiveTab("summaryTab")}}>
                     Summary
                 </button>
