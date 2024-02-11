@@ -2,10 +2,18 @@ from flask import Flask, request, jsonify
 from googleapiclient.discovery import build
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app)
-youtube = build("youtube","v3",developerKey="AIzaSyAO7SrY7EwY2JHv28qksxr2xmOSwbA96PU")
+youtube = build("youtube","v3",developerKey="AIzaSyDk0We7u9xaFhJuJnJKIPJRbox0Km6X3n0")
+
+#Configure logger
+file_handler = logging.FileHandler("app.log")
+file_handler.setLevel(logging.DEBUG)
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.DEBUG)
+
 
 @app.route("/getComments", methods=["POST"])
 def getComments():
@@ -18,8 +26,11 @@ def getComments():
     Returns:
     - JSON: A JSON object containing array of comments
     """
+    
     try:
-        videoID = request.json
+        app.logger.debug("Request received at /getComments")
+        videoID = request.json.get("videoID")
+        app.logger.debug(f"Video ID: {videoID}")
 
         #Fetch comments via YouTube API
         response = youtube.commentThreads().list(
@@ -36,6 +47,7 @@ def getComments():
         
         return jsonify({"message":"succesfully fetched comments","data":comments}),200
     except Exception as e:
+        app.logger.error(f"Error with /getComments route: {e}")
         return jsonify({"message":f"error: {e}"}),500
 
 @app.route("/getTranscript",methods=["POST"])
@@ -50,6 +62,7 @@ def getTranscript():
     - JSON: A JSON object containing the transcript if function successful
     """
     try:
+        app.logger.debug("Request received at /getTranscript")
         videoID = request.json #Fetch video ID from request data
         response = youtube.captions().list( #
             part="snippet",
@@ -67,6 +80,7 @@ def getTranscript():
         
         return jsonify({"message":"transcript successfully retrieved from YouTube API", "data":transcripts}),200
     except Exception as e:
+        app.logger.error(f"Error with /getTranscripts route")
         return jsonify({"message":f"error: {e}"}),500
 
 @app.route("/rate",methods=["POST"])
@@ -81,6 +95,7 @@ def rate():
     - JSON: A JSON object containing sentiment analysis score as a string
     """
     try:
+        app.logger.debug("Received request at /rate")
         comments = request.json
         analyzer = SentimentIntensityAnalyzer()
         text = "".join(comments) #Concatenate all the comments into a single block of text
@@ -90,6 +105,7 @@ def rate():
 
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
+        app.logger.error(f"Error with /rate route: {e}")
         return jsonify({"message":f"error: {e}"}),500
 
 @app.route('/') #Root of application
