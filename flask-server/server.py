@@ -36,7 +36,7 @@ def getComments():
         response = youtube.commentThreads().list(
             part="snippet",
             videoId=videoID,
-            maxResults=10
+            maxResults=100
         ).execute()
 
         #Store comments in array
@@ -98,10 +98,9 @@ def rate():
         app.logger.debug("Received request at /rate")
         comments = request.json
         analyzer = SentimentIntensityAnalyzer()
-        text = "".join(comments) #Concatenate all the comments into a single block of text
+        text = "".join(list(comments)) #Concatenate all the comments into a single block of text
         scores = analyzer.polarity_scores(text) #Compute the sentiment analysis scores of the text
-        codeToWord = {"neg":"Negative","neu":"Neutral","pos":"Positive","compound":"Compound"} #Maps keys in 'scores' variable to readable form
-        result = codeToWord[max(scores.items(),key=lambda pair: pair[1])[0]] #Obtains final rating as adjective
+        result = str(scores["compound"])
 
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
