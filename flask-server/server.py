@@ -5,7 +5,6 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-
 youtube = build("youtube","v3",developerKey="AIzaSyAO7SrY7EwY2JHv28qksxr2xmOSwbA96PU")
 
 @app.route("/getComments", methods=["POST"])
@@ -84,10 +83,10 @@ def rate():
     try:
         comments = request.json
         analyzer = SentimentIntensityAnalyzer()
-        text = sum(comments) #Concatenate all the comments into a single block of text
+        text = "".join(comments) #Concatenate all the comments into a single block of text
         scores = analyzer.polarity_scores(text) #Compute the sentiment analysis scores of the text
         codeToWord = {"neg":"Negative","neu":"Neutral","pos":"Positive","compound":"Compound"} #Maps keys in 'scores' variable to readable form
-        result = codeToWord[max([(key,value) for key,value in scores.items()],lambda pair: pair[1])[0]] #Obtains final rating as adjective
+        result = codeToWord[max(scores.items(),lambda pair: pair[1])[0]] #Obtains final rating as adjective
 
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
