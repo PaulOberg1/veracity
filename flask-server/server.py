@@ -10,8 +10,11 @@ def getComments():
     """
     Fetch YouTube comments given a video ID
 
+    Input:
+    - JSON: A JSON object containing the video ID
+
     Returns:
-    - JSON: Data field contains array of comments
+    - JSON: A JSON object containing array of comments
     """
     try:
         videoID = request.json
@@ -39,8 +42,11 @@ def rate():
     """
     Perform sentiment analysis on a set of comments and return a score
 
+    Input:
+    - JSON: A JSON object containing an array of YouTube comments
+
     Returns:
-    - JSON: Data field contains sentiment analysis score as a string
+    - JSON: A JSON object containing sentiment analysis score as a string
     """
     try:
         comments = request.json
