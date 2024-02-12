@@ -60,8 +60,8 @@ const SummaryPage = (videoID) => {
     return (
         <div>
             {/* Summary Display if available */}
-            {summaryHTML && (
-                <div dangerouslySetInnerHTML={{__html: summaryHTML}} /> 
+            {summary && (
+                <p>{summary}</p>
             )}
             
         </div>
