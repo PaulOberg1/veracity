@@ -29,7 +29,7 @@ def getComments():
     
     try:
         app.logger.debug("Request received at /getComments")
-        videoID = request.json.get("videoID")
+        videoID = request.json.get("videoID") #Fetch video ID from request data
         app.logger.debug(f"Video ID: {videoID}")
 
         #Fetch comments via YouTube API
@@ -50,8 +50,8 @@ def getComments():
         app.logger.error(f"Error with /getComments route: {e}")
         return jsonify({"message":f"error: {e}"}),500
 
-@app.route("/getTranscript",methods=["POST"])
-def getTranscript():
+@app.route("/getDescription",methods=["POST"])
+def getDescription():
     """
     Fetch transcript of a YouTube video given a video ID
 
@@ -62,25 +62,22 @@ def getTranscript():
     - JSON: A JSON object containing the transcript if function successful
     """
     try:
-        app.logger.debug("Request received at /getTranscript")
-        videoID = request.json #Fetch video ID from request data
-        response = youtube.captions().list( #
+        app.logger.debug("Request received at /getDescription")
+        videoID = request.json.get("videoID") #Fetch video ID from request data
+        app.logger.debug(videoID)
+        response = youtube.videos().list( #
             part="snippet",
-            videoId = videoID
-        )
-        transcripts=[]
-        for item in response["items"]:
-            caption_id=item["id"] #Get ID of given caption track
-            transcript_response=youtube.captions.download( #Get caption track matching video ID
-                id=caption_id,
-                tfmt="ttml" #Convert caption track to Timed Text Markup Language format
-            ).execute()
-            transcript=transcript_response.decode("utf-8")
-            transcripts.append(transcript)
+            id = videoID
+        ).execute()
+        if response:
+            app.logger.debug(response)
+            app.logger.debug("response successful")
+        video_description = response["items"][0]["snippet"]["description"]
+        app.logger.debug(f"\n\n\nDESCRIPTION = {video_description}")
         
-        return jsonify({"message":"transcript successfully retrieved from YouTube API", "data":transcripts}),200
+        return jsonify({"message":"description successfully retrieved from YouTube API", "data":video_description}),200
     except Exception as e:
-        app.logger.error(f"Error with /getTranscripts route")
+        app.logger.error(f"Error with /getDescription route: {e}")
         return jsonify({"message":f"error: {e}"}),500
 
 @app.route("/rate",methods=["POST"])
