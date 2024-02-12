@@ -1,6 +1,6 @@
 /*
     File: SummaryPage.js
-    Description: Implement transcript summary feature.
+    Description: Implement description summary feature.
     Dependencies: react, axios 
 */
 
@@ -9,56 +9,56 @@ import axios from "axios";
 
 
 /**
- * Display summary page with summarise button and summarised transcript
+ * Display summary page with summarise button and summarised description
  * @returns {HTML} The summary page as HTML
  */
 const SummaryPage = (videoID) => {
-    const [transcript,setTranscript] = useState("");
-    const [summaryHTML,setSummaryHTML] = useState(null);
+    const [description,setDescription] = useState("");
+    const [summaryHTML,setSummaryHTML] = useState("");
 
 
-    useEffect(() => { //Call once video ID available
+    useEffect(() => { //Call each time video ID updated
         /**
-         * Fetch transcript from backend given video ID
+         * Fetch description from backend given video ID
          */
-        const getTranscript = () => {
-            axios.post("/getTranscript",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
-            .then(response => response.json)
-            .then(result => { //Receive transcript from backend
+        const getDescription = () => {
+            axios.post("/getDescription",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
+            .then(response => response.data)
+            .then(result => { //Receive description from backend
                 console.log(result.message);
-                setTranscript(result.data); //Update transcript state
+                setDescription(result.data); //Update description state
             })
             .catch((error) => {
                 console.log(error.message);
             })
         };
-        getTranscript();
+        if (videoID)
+            getDescription();
     },[videoID]);
 
-    useEffect(() => { //Call each time transcript updated
+    useEffect(() => { //Call each time description updated
         /**
-         * Makes POST request to backend sending transcript data
+         * Makes POST request to backend sending description data
          * Receives summary HTML data from backend and stores data
          * Handles error checking
          */
-        const sendTranscript = () => {
-            axios.post("/summarise",{transcript:transcript}, {headers: {"Content-Type":"application/json"}}) //Send transcript to backend
+        const sendDescription = () => {
+            axios.post("/summarise",{description:description}, {headers: {"Content-Type":"application/json"}}) //Send description to backend
             .then(response => response.data)
             .then(result => { //Receive summary data from backend
                 console.log("response : " + result.message);
-                setSummary(result.text); //Store summary data as html on frontend
+                setSummaryHTML(result.text); //Store summary data as html on frontend
             })
             .catch((error) => {
                 console.error("error: " + error);
             })
         };
-        if (transcript)
-            sendTranscript();
-    },[transcript]);
+        if (description)
+            sendDescription();
+    },[description]);
 
     return (
         <div>
-
             {/* Summary Display if available */}
             {summaryHTML && (
                 <div dangerouslySetInnerHTML={{__html: summaryHTML}} /> 
