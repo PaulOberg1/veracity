@@ -14,7 +14,7 @@ import axios from "axios";
  */
 const SummaryPage = (videoID) => {
     const [description,setDescription] = useState("");
-    const [summaryHTML,setSummaryHTML] = useState("");
+    const [summary,setSummary] = useState("");
 
 
     useEffect(() => { //Call each time video ID updated
@@ -47,7 +47,7 @@ const SummaryPage = (videoID) => {
             .then(response => response.data)
             .then(result => { //Receive summary data from backend
                 console.log("response : " + result.message);
-                setSummaryHTML(result.text); //Store summary data as html on frontend
+                setSummary(result.text); //Store summary data as html on frontend
             })
             .catch((error) => {
                 console.error("error: " + error);
