@@ -35,29 +35,30 @@ const SummaryPage = (videoID) => {
         getTranscript();
     },[videoID]);
 
-    /**
-     * Makes POST request to backend sending transcript data
-     * Receives summary HTML data from backend and stores data
-     * Handles error checking
-     */
-    const sendTranscript = () => {
-        axios.post("/summarise",transcript, {headers: {"Content-Type":"application/json"}}) //Send transcript to backend
-        .then(response => response.json)
-        .then(result => { //Receive summary data from backend
-            console.log("response : " + result.message);
-            setSummaryHTML(result.text); //Store summary data as html on frontend
-        })
-        .catch((error) => {
-            console.error("error: " + error);
-        })
-    }
+    useEffect(() => { //Call each time transcript updated
+        /**
+         * Makes POST request to backend sending transcript data
+         * Receives summary HTML data from backend and stores data
+         * Handles error checking
+         */
+        const sendTranscript = () => {
+            axios.post("/summarise",{transcript:transcript}, {headers: {"Content-Type":"application/json"}}) //Send transcript to backend
+            .then(response => response.data)
+            .then(result => { //Receive summary data from backend
+                console.log("response : " + result.message);
+                setSummary(result.text); //Store summary data as html on frontend
+            })
+            .catch((error) => {
+                console.error("error: " + error);
+            })
+        };
+        if (transcript)
+            sendTranscript();
+    },[transcript]);
 
     return (
         <div>
-            {/* Summary Button if transcript available */}
-            {transcript && (
-                <button onClick={sendTranscript()}>Summarise Video</button>
-            )}
+
             {/* Summary Display if available */}
             {summaryHTML && (
                 <div dangerouslySetInnerHTML={{__html: summaryHTML}} /> 

@@ -35,7 +35,7 @@ const RatingPage = (videoID) => {
             })
         };
         if (videoID) {
-            console.log(`Video ID (${videoID}) available for post request`);
+            console.log(`Video ID available for post request`);
             getComments();
         }
     },[videoID]);
