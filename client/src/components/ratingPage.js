@@ -34,30 +34,38 @@ const RatingPage = (videoID) => {
                 console.error(`error: ${error}`);
             })
         };
-        getComments();
+        if (videoID) {
+            console.log(`Video ID (${videoID}) available for post request`);
+            getComments();
+        }
     },[videoID]);
 
 
-    /**
-     * Makes POST request to backend to send comment data
-     * Receive sentiment analysis scores of comments
-     * Handles error checking
-     */        
-    const getRating = () => {
-        axios.post("/rate",comments, {headers: {"Content-Type":"application/json"}}) //Post comments to backend
-        .then(response => response.data)
-        .then(result => {
-            console.log("response: " + result.data); //Log success
-            setRating(result.data); //Acccess rating from backend response, update 'rating' state
-        })
-        .catch((error) => {
-            console.error("error : " + error);
-        })
-    }
+    useEffect(() => {
+        /**
+         * Makes POST request to backend to send comment data
+         * Receive sentiment analysis scores of comments
+         * Handles error checking
+         */        
+        const getRating = () => {
+            axios.post("/rate",comments, {headers: {"Content-Type":"application/json"}}) //Post comments to backend
+            .then(response => response.data)
+            .then(result => {
+                console.log("response: " + result.data); //Log success
+                setRating(result.data); //Acccess rating from backend response, update 'rating' state
+            })
+            .catch((error) => {
+                console.error("error : " + error);
+            })
+        }
+        if (comments) {
+            console.log("Comments available for post request");
+            getRating();
+        }
+    },[comments]);
 
     return (
         <div>
-            <button onClick={getRating()}>Veracity Rating</button>
 
             {/* Rating Display if available */}
             {rating &&
