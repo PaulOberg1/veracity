@@ -53,7 +53,6 @@ def summarise():
         return jsonify({"message": f"error: {e}"}), 500
 
 
-# NOTE: I did not use tokenize library from nltk because it gives me sentences with each word character separated by a space.
 def read_description(description):
     """
     Processes a given description into a list of sentences, where each sentence is represented as a list of words.
