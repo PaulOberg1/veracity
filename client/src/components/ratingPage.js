@@ -13,32 +13,31 @@ import axios from "axios";
  * Display rating page with rate button and rating
  * @returns {HTML} The rating page as HMTL
  */
-const RatingPage = (videoID) => {
-    const [comments,setComments] = useState("");
+const RatingPage = ({metadata}) => {
     const [rating, setRating] = useState("");
 
-    useEffect(() => { //Call once video ID available
-        /**
-         * Makes POST request to backend to send current video id
-         * Receives comment section of given video
-         *  Updates 'comments' state
-         */
-        const getComments = () => {
-            axios.post("/getComments",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
-            .then(response => response.data)
-            .then(result => { //Receive comments array from backend
-                console.log(`success : ${result.message}`);
-                setComments(result.data); //Update 'comments' state
-            })
-            .catch((error) => {
-                console.error(`error: ${error}`);
-            })
-        };
-        if (videoID) {
-            console.log(`Video ID available for post request`);
-            getComments();
-        }
-    },[videoID]);
+    // useEffect(() => { //Call once video ID available
+    //     /**
+    //      * Makes POST request to backend to send current video id
+    //      * Receives comment section of given video
+    //      *  Updates 'comments' state
+    //      */
+    //     const getComments = () => {
+    //         axios.post("/getComments",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
+    //         .then(response => response.data)
+    //         .then(result => { //Receive comments array from backend
+    //             console.log(`success : ${result.message}`);
+    //             setComments(result.data); //Update 'comments' state
+    //         })
+    //         .catch((error) => {
+    //             console.error(`error: ${error}`);
+    //         })
+    //     };
+    //     if (videoID) {
+    //         console.log(`Video ID available for post request`);
+    //         getComments();
+    //     }
+    // },[videoID]);
 
 
     useEffect(() => {
@@ -48,7 +47,8 @@ const RatingPage = (videoID) => {
          * Handles error checking
          */        
         const getRating = () => {
-            axios.post("/rate",comments, {headers: {"Content-Type":"application/json"}}) //Post comments to backend
+            console.log(metadata);
+            axios.post("/rate",{metadata:metadata}, {headers: {"Content-Type":"application/json"}}) //Post comments to backend
             .then(response => response.data)
             .then(result => {
                 console.log("response: " + result.data); //Log success
@@ -58,11 +58,11 @@ const RatingPage = (videoID) => {
                 console.error("error : " + error);
             })
         }
-        if (comments) {
+        if (metadata) {
             console.log("Comments available for post request");
             getRating();
         }
-    },[comments]);
+    },[metadata]);
 
     return (
         <div>

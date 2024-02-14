@@ -4,7 +4,8 @@
  * Dependencies: react
  */
 
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 import SummaryPage from "./SummaryPage";
 import RatingPage from "./RatingPage";
 
@@ -24,13 +25,37 @@ const getVideoID = (url) => {
 }
 
 
+
 /**
  * Displays the home page
  * @returns {HTML} The home page HTML containing 2 buttons and corresponding tabs
  */
 const HomePage = () => {
     const [activeTab, setActiveTab] = useState("ratingTab"); //Either rating tab or summary tab
+
     const [URL, setURL] = useState("https://www.youtube.com/watch?v=MJiBpHVdzAg");
+    
+    const [metadata, setMetadata] = useState({});
+
+
+    useEffect(() => { //Run once at start of program
+        /**
+         * Retrieves title, description, topic and commments of video given its ID
+         */
+        const getMetadata = () => {
+            const videoID = getVideoID(URL);
+            axios.post("/getMetadata",{videoID:videoID}, {headers: {"Content-Type":"application/json"}})
+            .then(response => response.data)
+            .then(result => {
+                console.log(result.message);
+                setMetadata(result.data);              
+            })
+            .catch((error) => {console.error(`error occured fetching metadata: ${error}`)})
+        };
+        if (URL)
+            getMetadata();
+    },[URL]);
+
 
     return (
         <div>
@@ -57,8 +82,8 @@ const HomePage = () => {
             </div>
 
             {/* Display contents of either tab */}
-            {activeTab==="ratingTab" && <RatingPage videoID={getVideoID(URL)}/>}
-            {activeTab==="summaryTab" && <SummaryPage videoID={getVideoID(URL)}/>}
+            {activeTab==="ratingTab" && <RatingPage comments={metadata} />}
+            {activeTab==="summaryTab" && <SummaryPage metadata={metadata} />}
         </div>
     )
 }
