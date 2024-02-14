@@ -42,7 +42,31 @@ def rate():
         app.logger.error(f"Error with /rate route: {e}")
         return jsonify({"message":f"error: {e}"}),500
 
-    
+@app.route('/summarise', methods=['POST'])
+def summarise():
+    """
+    Summarise given description and return to frontend
+
+    Input:
+    - JSON: A JSON object containing a YouTube description as a string
+
+    Returns:
+    - A JSON object containing the summarised text as a string
+    """
+    try:
+        #Access video metadata
+        metadata = request.json.get("metadata")
+        description = metadata.get("description")
+        title = metadata.get("title")#request.json.get("title")
+        category = metadata.get("category")#request.json.get("topic")
+        app.logger.debug(description,title,category)
+        # 2nd parameter in this function determines the size of summary.
+        summary = generate_summary(description, 1)
+
+        return jsonify({"message":"text successfully summarised","data":summary}),200
+    except Exception as e:
+        app.logger.debug(f"text summarisation unsuccessful: {e}")
+        return jsonify({"message":"text summarisation unsuccessful"}),500   
 
 @app.route("/getMetadata", methods=["POST"])
 def getMetadata():
