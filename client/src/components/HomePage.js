@@ -25,16 +25,13 @@ const getVideoID = (url) => {
 }
 
 
-
 /**
  * Displays the home page
  * @returns {HTML} The home page HTML containing 2 buttons and corresponding tabs
  */
 const HomePage = () => {
     const [activeTab, setActiveTab] = useState("ratingTab"); //Either rating tab or summary tab
-
     const [URL, setURL] = useState("https://www.youtube.com/watch?v=MJiBpHVdzAg");
-    
     const [metadata, setMetadata] = useState({});
 
 
@@ -48,7 +45,8 @@ const HomePage = () => {
             .then(response => response.data)
             .then(result => {
                 console.log(result.message);
-                setMetadata(result.data);              
+                setMetadata(result.data);
+
             })
             .catch((error) => {console.error(`error occured fetching metadata: ${error}`)})
         };
@@ -82,7 +80,7 @@ const HomePage = () => {
             </div>
 
             {/* Display contents of either tab */}
-            {activeTab==="ratingTab" && <RatingPage comments={metadata} />}
+            {activeTab==="ratingTab" && <RatingPage metadata={metadata} />}
             {activeTab==="summaryTab" && <SummaryPage metadata={metadata} />}
         </div>
     )
