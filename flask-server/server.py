@@ -31,12 +31,13 @@ def rate():
     """
     try:
         app.logger.debug("Received request at /rate")
-        comments = request.json.get("metadata")["comments"]
+        data = request.json.get("metadata")
+        comments = data.get("comments")
         analyzer = SentimentIntensityAnalyzer()
         text = "".join(list(comments)) #Concatenate all the comments into a single block of text
         scores = analyzer.polarity_scores(text) #Compute the sentiment analysis scores of the text
         result = str(scores["compound"])
-
+        app.logger.debug("success rating")
         return jsonify({"message":"success","data":result}),200
     except Exception as e:
         app.logger.error(f"Error with /rate route: {e}")
@@ -54,6 +55,7 @@ def summarise():
     - A JSON object containing the summarised text as a string
     """
     try:
+        app.logger.debug("Request received at metadata endpoint")
         #Access video metadata
         metadata = request.json.get("metadata")
         description = metadata.get("description")
