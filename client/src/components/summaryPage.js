@@ -12,28 +12,8 @@ import axios from "axios";
  * Display summary page with summarise button and summarised description
  * @returns {HTML} The summary page as HTML
  */
-const SummaryPage = (metadata) => {
+const SummaryPage = ({metadata}) => {
     const [summary,setSummary] = useState("");
-
-
-    // useEffect(() => { //Call each time video ID updated
-    //     /**
-    //      * Fetch description from backend given video ID
-    //      */
-    //     const getDescription = () => {
-    //         axios.post("/getDescription",videoID, {headers: {"Content-Type":"application/json"}}) //Post video ID to backend
-    //         .then(response => response.data)
-    //         .then(result => { //Receive description from backend
-    //             console.log(result.message);
-    //             setDescription(result.data); //Update description state
-    //         })
-    //         .catch((error) => {
-    //             console.log(error.message);
-    //         })
-    //     };
-    //     if (videoID)
-    //         getDescription();
-    // },[videoID]);
 
     useEffect(() => { //Call each time description updated
         /**
@@ -42,8 +22,8 @@ const SummaryPage = (metadata) => {
          * Handles error checking
          */
         const sendMetadata = () => {
-            axios.post("/summarise",{metadata:metadata}, 
-            {headers: {"Content-Type":"application/json"}}) //Send description to backend
+            console.log("metadata = " + metadata);
+            axios.post("/summarise",{metadata:metadata}, {headers: {"Content-Type":"application/json"}}) //Post metadata to backend
             .then(response => response.data)
             .then(result => { //Receive summary data from backend
                 console.log("response : " + result.message);
@@ -53,8 +33,10 @@ const SummaryPage = (metadata) => {
                 console.error("error: " + error);
             })
         };
-        if (metadata)
+        if (metadata) {
+            console.log("metadata available for summary")
             sendMetadata();
+        }
     },[metadata]);
 
     return (
